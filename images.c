@@ -50,12 +50,20 @@ int main(int argc, char *argv[]) {
 
 	char* get = malloc(420*69);
 	
-	for (i=0; i<4; i++) {
+	while(1) {
 		get = fgets(get, 100, fh);
 		if (strcmp(get, "P3\n") == 0) {
 			printf("Dank brah.\n");
 		}
+		if (get[0] == '#' || get[0] == ' ') {
+		  get = fgets(get, 100, fh);
+		  i++;
+		}
+
 		printf("%s", get);
+		if (strcmp(get, "255\n") == 0) {
+			break;
+		}
 	}
 
 	fclose(fh);
