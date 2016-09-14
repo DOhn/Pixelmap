@@ -8,13 +8,12 @@
 // Pixel *pixmap1d
 
 void sameType(FILE *fh, FILE *out, char* get) {
-	while(1) {
-		get = fgets(get, 100, fh);
+	while(fgets(get, 100, fh) != NULL) {
 		fputs(get, out);
-
-		if (get == NULL) {
-			break;
-		}
+		// if (fh == NULL) {
+		// 	printf("This was the error.");
+		// 	break;
+		// }
 	}
 }
 
@@ -54,7 +53,7 @@ int main(int argc, char *argv[]) {
 		return(-1);
 	}
 
-	char* get = malloc(420*69);
+	char* get = malloc(500);
 	
 	while(1) {
 		get = fgets(get, 100, fh);
@@ -64,7 +63,6 @@ int main(int argc, char *argv[]) {
 			type[1] = get[1];
 			if (strncmp(type, argv[1], 2) == 0) {
 				fputs(get, out);
-				fputs("\n", out);
 				get = fgets(get, 100, fh);
 				op_type = 0;
 			} 
