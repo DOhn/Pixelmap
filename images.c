@@ -5,43 +5,40 @@
 // 	unsigned char r, g, b, a;
 // }Pixel;
 
-// Pixel *pixmap1d;
+// Pixel *pixmap1d
 
-int width;
-int height;
+void sameType(input, output, type) {
+}
 
-// void buffer() {
-// 	int row, col;
-// 	int dx, dy;
+void convertP3(input, output) {
 
-// 	pixmap1d = malloc(sizeof(Pixel) * width * height);
+}
 
-// 	for (row = 0; row < height; row += 1) {
-// 		for (col = 0; col < width; col += 1) {
-// 		// Enter code here, k-k-k-k-klappa
-// 		}
-// 	}
-// }
+void convertP6(input, output) {
+
+}
 
 int main(int argc, char *argv[]) {
-	if (argc > 3) {
-		printf("Error: Too little arguments.");
-		return(1);
-	}
-	if (argc < 3) {
-		printf("Error: Too many arguments.");
+	if (argc != 4) {
+		printf("Error: Incorrect amount of arguments.  Three is needed.\n");
 		return(1);
 	}
 
-	if (argc != 3) {
-		printf("Error: Incorrect amount of arguments.  Three is needed.");
+	printf("%s\n", argv[1]);
+
+	if (argv[1] != "P6 " || argv[1] != "P3") {
+		printf("Error: First Argument must be in P3 or P6.\n");
 		return(1);
 	}
+
+	FILE *out;
+	out = fopen(argv[3], "w+");
 
 	FILE *fh;
-	int n, i;
-
 	fh = fopen(argv[2], "r");
+
+	int i, size, color;
+	char type[2];
 
 	if(fh == NULL) {
 		perror("Error: Couldn't open file.");
@@ -52,19 +49,31 @@ int main(int argc, char *argv[]) {
 	
 	while(1) {
 		get = fgets(get, 100, fh);
-		if (strcmp(get, "P3\n") == 0) {
-			printf("Dank brah.\n");
+		if (strcmp(get, "P3\n") == 0 || strcmp(get, "P6\n") == 0) {
+			type[0] = get[0];
+			type[1] = get[1];
+			if (strncmp(type, argv[1], 2) == 0) {
+				fputs(get, out);
+			} 
+			else {
+				fputs(argv[1], out);
+			}
 		}
-		if (get[0] == '#' || get[0] == ' ') {
-		  get = fgets(get, 100, fh);
-		  i++;
+		if (get[0] == '#') {
+			get = fgets(get, 100, fh);
+		}
+		else {
+			printf("%s", get);
 		}
 
-		printf("%s", get);
 		if (strcmp(get, "255\n") == 0) {
+			color = atoi(get);
 			break;
 		}
 	}
+
+	// printf("%c%c\n", type[0], type[1]);
+	// printf("%i\n", color);
 
 	fclose(fh);
 	return(0);
