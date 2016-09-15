@@ -7,17 +7,29 @@
 
 // Pixel *pixmap1d
 
-void sameType(FILE *fh, FILE *out, char* get, int type) {
+void sameType(FILE *fh, FILE *out, char* get) {
 	while(fgets(get, 100, fh) != NULL) {
 		fputs(get, out);
 	}
+	fclose(out);
 }
 
-void convertP3(input, output) {
+void convertToP3(FILE *fh, FILE *out, char* get, int size) {
+	unsigned char* buff = (unsigned char*)get;
+	//unsigned char* buff = (unsigned char*)malloc(400000);
+	unsigned char num;
+	int i;
 
+	while(fread(buff, size, 1, fh)) {
+		for (i=0;i<size;i++) {
+			num = buff[i];
+			fprintf(out, "%u \n", num);
+			//fputs()
+		}
+	} 
 }
 
-void convertP6(input, output) {
+void convertToP6(input, output) {
 
 }
 
@@ -34,24 +46,24 @@ int main(int argc, char *argv[]) {
 		return(1);
 	}
 
-	FILE *out;
-	out = fopen(argv[3], "w+");
-
 	FILE *fh;
 	fh = fopen(argv[2], "r");
-
-	int i, color;
-	int op_type;
-	char type[2];
 
 	if(fh == NULL) {
 		perror("Error: Couldn't open file.");
 		return(-1);
 	}
 
-	char* get = malloc(500);
-	
-	
+	int i, color;
+	int op_type;
+	char type[2];
+
+	FILE *out;
+	out = fopen(argv[3], "w+");
+
+	char* get = malloc(500); 
+	int size = 500;
+
 	while(1) {	
 		get = fgets(get, 100, fh);	
 		
@@ -85,7 +97,15 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (op_type == 0) {
-		sameType(fh, out, get, type[2]);
+		sameType(fh, out, get);
+	} 
+	else {
+		if (strncmp("P6", argv[1], 2) == 0) {
+			convertToP6();
+		} 
+		else {
+			convertToP3(fh, out, get, size);
+		}
 	}
 
 	// printf("%c%c\n", type[0], type[1]);
@@ -118,6 +138,4 @@ int main(int argc, char *argv[]) {
 	// else {
 	// 	fprintf("Error: Can only convert to P3 or P6.");
 	// }
-
-	return 0;
 }
