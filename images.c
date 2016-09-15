@@ -15,22 +15,35 @@ void sameType(FILE *fh, FILE *out, char* get) {
 }
 
 void convertToP3(FILE *fh, FILE *out, char* get, int size) {
+	// Use new buffer to get unsigned char instead of char
 	unsigned char* buff = (unsigned char*)get;
-	//unsigned char* buff = (unsigned char*)malloc(400000);
 	unsigned char num;
 	int i;
 
+	// Iterates through the read file by each character
 	while(fread(buff, size, 1, fh)) {
-		for (i=0;i<size;i++) {
+		for (i=0; i<size; i++) {
 			num = buff[i];
+			// Rewrites the data as ASCII
 			fprintf(out, "%u \n", num);
-			//fputs()
 		}
-	} 
+	}
 }
 
-void convertToP6(input, output) {
+void convertToP6(FILE *fh, FILE *out, char* get, int size) {
+	// fgetc and atoi
+	// fwrite(ptr, size, nmemb, stream)
+	unsigned char num;
+	char* tok;
 
+	while(fgets(get, 100 ,fh) != NULL) {
+		tok = strtok(get, " \n");
+		while(tok) {
+			num = (unsigned char)atoi(tok);
+			fputc(num, out);
+			tok = strtok(NULL, " \n");
+		}
+	}
 }
 
 int main(int argc, char *argv[]) {
@@ -101,7 +114,7 @@ int main(int argc, char *argv[]) {
 	} 
 	else {
 		if (strncmp("P6", argv[1], 2) == 0) {
-			convertToP6();
+			convertToP6(fh, out, get, size);
 		} 
 		else {
 			convertToP3(fh, out, get, size);
