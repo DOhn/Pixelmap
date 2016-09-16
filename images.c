@@ -1,12 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// typedef struct Pixel {
-// 	unsigned char r, g, b, a;
-// }Pixel;
-
-// Pixel *pixmap1d
-
 void sameType(FILE *fh, FILE *out, char* get) {
 	while(fgets(get, 100, fh) != NULL) {
 		fputs(get, out);
@@ -27,21 +21,21 @@ void convertToP3(FILE *fh, FILE *out, char* get, int size) {
 			// Rewrites the data as ASCII
 			fprintf(out, "%u \n", num);
 		}
-	}
+	} 
 }
 
 void convertToP6(FILE *fh, FILE *out, char* get, int size) {
 	// fgetc and atoi
 	// fwrite(ptr, size, nmemb, stream)
+	unsigned char* buff = (unsigned char*)get;
 	unsigned char num;
-	char* tok;
-
-	while(fgets(get, 100 ,fh) != NULL) {
-		tok = strtok(get, " \n");
-		while(tok) {
-			num = (unsigned char)atoi(tok);
-			fputc(num, out);
-			tok = strtok(NULL, " \n");
+	int i;
+	
+	while(fread(buff, size, 1, fh)) {
+		for (i=0; i<size; i++) {
+			num = buff[i];
+			atoi(num);
+			fwrite(num, size, 1, out);
 		}
 	}
 }
@@ -121,34 +115,6 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	// printf("%c%c\n", type[0], type[1]);
-	// printf("%i\n", color);
-
 	fclose(fh);
 	return(0);
-
-	// int read
-	// read = atoi(argv[1]);
-
-	// printf("%s", read);
-	
-	// ATOI IS USED TO CONVERT CHAR INTO INT
-	// Could be used to get total amount of chars
-	// within a text file
-
-	// buffer();
-
-	// if (atoi(argv[0]) == '3') {
-	// 	FILE* fh = fopen("new_p6.ppm", "w");
-	// 	fwrite(pixmap1d, sizeof(Pixel), width*height, fh);
-	// 	fclose(fh);
-	// }
-	// else if (atoi(argv[0] == '6')) {
-	// 	FILE* fh = fopen("new_p3.ppm", "w");
-	// 	fwrite(pixmap1d, sizeof(Pixel), width*height, fh);
-	// 	fclose(fh);
-	// }
-	// else {
-	// 	fprintf("Error: Can only convert to P3 or P6.");
-	// }
 }
