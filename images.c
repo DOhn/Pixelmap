@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Checks if first argument is valid.
-	if (strncmp(argv[1], "P6", 2) == 1 || strncmp(argv[1], "P3", 2) == 1) {
+	if (strncmp(argv[1], "6", 1) == 1 || strncmp(argv[1], "3", 1) == 1) {
 		printf("Error: First Argument must be in P3 or P6.\n");
 		return(1);
 	}
@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
 	// Declares values used within the program
 	int i, color;
 	int op_type;
-	char type[2];
+	char type[1];
 
 	// Opens the write file and creates it if it doesn't exist
 	FILE *out;
@@ -82,10 +82,9 @@ int main(int argc, char *argv[]) {
 		get = fgets(get, 100, fh);	
 		
 		// Checks if it starts with magic number and what the file is
-		if (strcmp(get, "P3\n") == 0 || strcmp(get, "P6\n") == 0) {
+		if (strcmp(get, "3\n") == 0 || strcmp(get, "6\n") == 0) {
 			type[0] = get[0];
-			type[1] = get[1];
-			if (strncmp(type, argv[1], 2) == 0) {
+			if (strncmp(type, argv[1], 1) == 0) {
 				fputs(get, out);
 				get = fgets(get, 100, fh);
 				op_type = 0;
@@ -119,7 +118,7 @@ int main(int argc, char *argv[]) {
 	} 
 	else {
 		// Checks what the user wants to convert the .ppm file too
-		if (strncmp("P6", argv[1], 2) == 0) {
+		if (strncmp("6", argv[1], 1) == 0) {
 			convertToP6(fh, out, get, size);
 		} 
 		else {
