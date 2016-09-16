@@ -25,17 +25,15 @@ void convertToP3(FILE *fh, FILE *out, char* get, int size) {
 }
 
 void convertToP6(FILE *fh, FILE *out, char* get, int size) {
-	// fgetc and atoi
-	// fwrite(ptr, size, nmemb, stream)
-	unsigned char* buff = (unsigned char*)get;
 	unsigned char num;
-	int i;
+	char* tok;
 	
-	while(fread(buff, size, 1, fh)) {
-		for (i=0; i<size; i++) {
-			num = buff[i];
-			atoi(num);
-			fwrite(num, size, 1, out);
+	while(fread(get, size, 1, fh)) {
+		tok = strtok(get, " \n");
+		while(tok) {
+			num = (unsigned char)atoi(tok);
+			fputc(num, out);
+			tok = strtok(NULL, " \n");
 		}
 	}
 }
